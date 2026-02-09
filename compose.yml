@@ -1,0 +1,46 @@
+---
+services:
+  db:
+    image: mahesh129/flm2026:mysql
+    ports:
+      - "3306:3306"
+    deploy:
+      replicas: 1
+  
+  auth_service:
+    image: mahesh129/flm2026:auth_service
+    ports:
+      - "5001:5001"
+    deploy:
+      replicas: 1
+    depends_on:
+      - db
+  
+  book_service:
+    image: mahesh129/flm2026:book_service
+    ports:
+      - "5002:5002"
+    deploy:
+      replicas: 1
+    depends_on:
+      - db
+
+  barrow_service:
+    image: mahesh129/flm2026:barrow_service
+    ports:
+      - "5003:5003"
+    deploy:
+      replicas: 1
+    depends_on:
+      - db
+
+app_service:
+    image: mahesh129/flm2026:app_service
+    ports:
+      - "5000:5000"
+    deploy:
+      replicas: 1
+    depends_on:
+      - auth_service
+      - book_service
+      - barrow_service
